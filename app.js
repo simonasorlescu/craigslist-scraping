@@ -125,7 +125,7 @@ passport.deserializeUser(function(user, callback){
 // config
 passport.use(new GoogleStrategy({
     clientID: '60568825522-52qmtg82t11tm3pa35b7q0r39a00j5pk.apps.googleusercontent.com',
-    clientSecret: 'votoysXixm8uVwpq5rfh1EVq',
+    clientSecret: 'B8HswAPpuHR1PDmU-hvMgMKe',
     callbackURL: "https://craigslist-scraping.herokuapp.com/auth/google/callback"
 },
 function (accessToken, refreshToken, profile, done) {
