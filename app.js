@@ -57,11 +57,13 @@ app.get('/searching', function(req, res){
 });
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['email']}));
-app.get('/auth/google/callback',
-passport.authenticate('google', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('/search');
-  });
+app.get('/auth/google/callback', function() {
+        passport.authenticate('google', {
+            successRedirect: '/profile',
+            failureRedirect: '/fail'
+        });
+    });
+
 
 app.get('/logout', function(req, res){
   req.logout();
