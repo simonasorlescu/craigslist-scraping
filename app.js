@@ -60,7 +60,7 @@ app.get('/auth/google', passport.authenticate('google', {scope: ['email']}));
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/',
   failureRedirect: '/fail'
-});
+}));
 
 app.get('/logout', function(req, res){
   req.logout();
