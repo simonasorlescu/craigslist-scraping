@@ -64,7 +64,6 @@ app.get('/auth/google/callback', function() {
         });
     });
 
-
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
