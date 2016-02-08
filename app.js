@@ -112,15 +112,14 @@ if (app.get('env') === 'development') {
 }
 
 // serialize and deserialize
-passport.serializeUser(function(user, callback){
-        console.log('serializing user.');
-        callback(null, user.id);
-    });
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
 
-passport.deserializeUser(function(user, callback){
-       console.log('deserialize user.');
-       callback(null, user.id);
-    });
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
 
 // config
 passport.use(new GoogleStrategy({
