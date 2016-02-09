@@ -18,11 +18,13 @@ $(function(){
   $('#results').on('click', '.save-btn', function() {
     var jobTitle = $(this).next('a').text()
     var jobURL = $(this).next('a').attr('href')
-    console.log(jobTitle, jobURL)
     var parameters = { title: jobTitle, url: jobURL };
     console.log(parameters)
+    $(this).parent().remove()
     $.get( '/save', parameters, function(data) {
-      console.log("whee!")
+      $('#alert').html(data)
+      console.log(data)
     });
   });
 });
+
