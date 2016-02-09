@@ -69,7 +69,7 @@ app.get('/searching', function(req, res){
   });
 });
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email'], session: true}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/search',
   failureRedirect: '/fail'
@@ -139,16 +139,17 @@ if (app.get('env') === 'development') {
 //   done(null, obj);
 // });
 
+// passport settings
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser: ' + user._id)
-  done(null, user._id);
+  console.log('serializeUser: ' + user.id)
+  done(null, user.id);
 });
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user){
+  user.findOne({_id : id}, function(err, user) {
     console.log(user)
     if(!err) done(null, user);
     else done(err, null)
-  })
+  });
 });
 
 // config
