@@ -12,8 +12,8 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var config = require('./config');
 var user = require('./models/user');
+var routes = require('./routes');
 
-// var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 var app = express();
@@ -45,46 +45,72 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', routes);
 // app.use('/users', users);
 
-// routes
-app.get('/', function(req, res){
-  console.log('enter', req.user);
-  res.render('index', { user: req.user });
+// user routes
+app.get('/', routes.index);
+app.get('/search', ensureAuthenticated, routes.search);
+app.get('/searching', ensureAuthenticated, routes.searching);
+app.get('/logout', function(req, res){
+  req.logOut();
+  res.redirect('/');
 });
 
-app.get('/search', ensureAuthenticated, function(req, res){
-  console.log('enter2', req.user);
-  res.render('search', { user: req.user });
-});
-
-app.get('/searching', function(req, res){
-  // input value from search
-  var val = req.query.search;
-  // url used to search yql
-  var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20craigslist.search" +
-  "%20where%20location%3D%22sfbay%22%20and%20type%3D%22jjj%22%20and%20query%3D%22" + val + "%22&format=" +
-  "json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-
-  requests(url,function(data){
-      res.send(data);
-  });
-});
-
+// auth routes
 app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/search',
-  failureRedirect: '/fail'
+  failureRedirect: '/'
 }));
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
 
 // test authentication
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/')
 }
+
+// app.get('/auth/google',
+//   passport.authenticate('google'),
+//   function(req, res){
+// });
+// app.get('/auth/google/callback',
+// passport.authenticate('google', { failureRedirect: '/' }),
+//   function(req, res) {
+//     res.redirect('/search');
+//   }
+// );
+
+// // test authentication
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) { return next(); }
+//   res.redirect('/')
+// }
+
+
+// app.get('/', function(req, res){
+//   res.render('index', { user: req.user });
+// });
+
+// app.get('/search', ensureAuthenticated, function(req, res){
+//   res.render('search', { user: req.user });
+// });
+
+// app.get('/searching', function(req, res){
+//   // input value from search
+//   var val = req.query.search;
+//   // url used to search yql
+//   var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20craigslist.search" +
+//   "%20where%20location%3D%22sfbay%22%20and%20type%3D%22jjj%22%20and%20query%3D%22" + val + "%22&format=" +
+//   "json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+//   requests(url,function(data){
+//       res.send(data);
+//   });
+// });
+
+// app.get('/logout', function(req, res){
+//   req.logout();
+//   res.redirect('/');
+// });
+
 
 function requests(url, callback) {
   // request module is used to process the yql url and return the results in JSON format
