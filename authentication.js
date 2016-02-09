@@ -5,6 +5,11 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var config = require('./config');
 // var user = require('./models/user');
 
+// create a user model
+var User = mongoose.model('User', {
+  oauthID: Number
+});
+
 // passport settings
 passport.serializeUser(function(user, done) {
   console.log('serializeUser: ' + user.id)
