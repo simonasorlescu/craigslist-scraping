@@ -10,13 +10,15 @@ var mongoose = require('mongoose')
 var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+var config = require('./config');
+
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
 
 var app = express();
 
 // connect to the database
-mongoose.connect('mongodb://simonasorlescu:simona1@ds059375.mongolab.com:59375/craigslist');
+mongoose.connect(config.mongoUrl);
 
 // create a user model
 var User = mongoose.model('User', {
@@ -142,9 +144,9 @@ passport.deserializeUser(function(id, done) {
 
 // config
 passport.use(new GoogleStrategy({
-    clientID: '60568825522-52qmtg82t11tm3pa35b7q0r39a00j5pk.apps.googleusercontent.com',
-    clientSecret: 'B8HswAPpuHR1PDmU-hvMgMKe',
-    callbackURL: "https://craigslist-scraping.herokuapp.com/auth/google/callback"
+  clientID: config.google.clientID,
+  clientSecret: config.google.clientSecret,
+  callbackURL: config.google.callbackURL
 },
 function (accessToken, refreshToken, profile, done) {
   User.findOne({ oauthID: profile.id }, function(err, user) {
