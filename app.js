@@ -8,7 +8,7 @@ var session = require('express-session');
 var mongoose = require('mongoose')
 
 var config = require('./config');
-var user = require('./models/user');
+// var user = require('./models/user');
 var routes = require('./routes');
 var passport = require('./authentication');
 
@@ -16,6 +16,11 @@ var app = express();
 
 // connect to the database
 mongoose.connect(config.mongoUrl);
+
+// create a user model
+var User = mongoose.model('User', {
+  oauthID: Number
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
