@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', routes.index);
 app.get('/search', ensureAuthenticated, routes.search);
 app.get('/searching', ensureAuthenticated, routes.searching);
+app.get('/save', ensureAuthenticated, routes.save)
 app.get('/logout', function(req, res){
   req.logOut();
   res.redirect('/');

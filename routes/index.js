@@ -29,8 +29,14 @@ exports.searching = function(req, res){
   "json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
   requests(url,function(data){
-    return res.send(data);
+    res.send(data);
   });
+};
+
+exports.save = function(req, res){
+  var title = req.query.title;
+  var url = req.query.url;
+  console.log(title, url);
 };
 
 function requests(url, callback) {
@@ -52,6 +58,6 @@ function requests(url, callback) {
       };
     };
     // pass back the results to client side
-    callback(resultsArray);
+    return callback(resultsArray);
   });
 };
