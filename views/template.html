@@ -1,7 +1,10 @@
 <script id="search-results" type="text/x-handlebars-template">
-  {{#each resultsArray}}
-    <li><a href={{about}}>{{title}}</a><br>{{desc}}></li>
-  {{/each}}
-  <br>
-  </ul>
+    {{#each resultsArray}}
+      <li>
+        <button type="button" class="btn btn-primary btn-xs save-btn">Save</button>
+        <a href={{about}}>{{title}}</a><br>{{desc}}>
+      </li>
+    {{/each}}
+    <br>
+    </ul>
 </script>
