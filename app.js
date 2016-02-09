@@ -15,6 +15,14 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var app = express();
 
+// connect to the database
+mongoose.connect(' mongodb://simonasorlescu:simona1@ds059375.mongolab.com:59375/craigslist');
+
+// create a user model
+var User = mongoose.model('User', {
+  oauthID: Number
+});
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 
@@ -112,14 +120,25 @@ if (app.get('env') === 'development') {
 }
 
 // serialize and deserialize
+// passport.serializeUser(function(user, done) {
+//   done(null, user);
+// });
+
+// passport.deserializeUser(function(obj, done) {
+//   done(null, obj);
+// });
+
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  console.log('serializeUser: ' + user._id)
+  done(null, user._id);
 });
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user){
+    console.log(user)
+    if(!err) done(null, user);
+    else done(err, null)
+  })
 });
-
 
 // config
 passport.use(new GoogleStrategy({
@@ -128,8 +147,25 @@ passport.use(new GoogleStrategy({
     callbackURL: "https://craigslist-scraping.herokuapp.com/auth/google/callback"
 },
 function (accessToken, refreshToken, profile, done) {
-    console.log(profile); //profile contains all the personal data returned
-    done(null, profile)
+  User.findOne({ oauthID: profile.id }, function(err, user) {
+    if(err) { console.log(err); }
+    if (!err && user != null) {
+     done(null, user);
+    } else {
+     var user = new User({
+       oauthID: profile.id,
+       created: Date.now()
+     });
+     user.save(function(err) {
+       if(err) {
+         console.log(err);
+       } else {
+         console.log("saving user ...");
+         done(null, user);
+       };
+     });
+    };
+  });
 }
 ));
 
