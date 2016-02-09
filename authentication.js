@@ -53,7 +53,7 @@ function (accessToken, refreshToken, profile, done) {
           console.log("Found registered user: " + oldUser.name + " is logged in!");
           done(null, oldUser);
         } else {
-          var newUser = new User();
+          var newUser = new user();
           newUser.name = profile.displayName;
           newUser.email = profile.emails[0].value;
           console.log(newUser);
