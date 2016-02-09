@@ -1,15 +1,11 @@
 extends layout
 
 block content
-    h1 Search SF Jobs
-
-    form(METHOD="LINK", ACTION="logout")
-        input(type="submit", value="Logout", class='btn btn-sm btn-primary')
+    h1 search sf jobs
+    a(href='/logout') Logout
     br
     br
-    input#search(type="search", placeholder="search...")
-    br
-    br
+    input#search(type="search", placeholder="Search Craig's Jobs")
     ul#results
     include template.html
 
