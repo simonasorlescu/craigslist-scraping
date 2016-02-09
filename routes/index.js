@@ -63,8 +63,8 @@ function requests(url, callback) {
           {title:results[i].title[0], about:results[i]["about"], desc:results[i]["description"]}
         );
       };
+      // pass back the results to client side
+      callback(resultsArray);
     };
-    // pass back the results to client side
-    return callback(resultsArray);
   });
 };
