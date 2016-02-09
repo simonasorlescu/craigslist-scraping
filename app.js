@@ -69,7 +69,7 @@ app.get('/searching', function(req, res){
   });
 });
 
-app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email'], session: true}));
 app.get('/auth/google/callback', passport.authenticate('google', {
   successRedirect: '/search',
   failureRedirect: '/fail'
@@ -79,6 +79,12 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
+
+// test authentication
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/')
+}
 
 function requests(url, callback) {
   // request module is used to process the yql url and return the results in JSON format
@@ -198,11 +204,6 @@ function (accessToken, refreshToken, profile, done) {
   }
 ));
 
-// test authentication
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/')
-}
 
 // production error handler
 // no stacktraces leaked to user
