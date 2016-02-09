@@ -16,6 +16,8 @@ $(function(){
     };
   });
   $('#results').on('click', '.save-btn', function() {
-    console.log("whee!")
+    var jobTitle = $(this).next('a').text()
+    var jobURL = $(this).next('a').attr('href')
+    console.log(jobTitle, jobURL)
   });
 });
