@@ -4,7 +4,7 @@ var config = require('../config');
 console.log(config);
 
 // create a job model
-var userSchema = new mongoose.Schema({
+var jobSchema = new mongoose.Schema({
   title: String,
   url: String,
 });
