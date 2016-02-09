@@ -7,7 +7,7 @@
 6 silly lifecycle node-express-ajax-craigslist@0.0.0~prestart: no script for prestart, continuing
 7 info lifecycle node-express-ajax-craigslist@0.0.0~start: node-express-ajax-craigslist@0.0.0
 8 verbose lifecycle node-express-ajax-craigslist@0.0.0~start: unsafe-perm in lifecycle true
-9 verbose lifecycle node-express-ajax-craigslist@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/vagrant/scraping/node-express-ajax-craigslist/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+9 verbose lifecycle node-express-ajax-craigslist@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/vagrant/scraping/node-express-ajax-craigslist/node_modules/.bin:/usr/local/heroku/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
 10 verbose lifecycle node-express-ajax-craigslist@0.0.0~start: CWD: /vagrant/scraping/node-express-ajax-craigslist
 11 silly lifecycle node-express-ajax-craigslist@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
 12 silly lifecycle node-express-ajax-craigslist@0.0.0~start: Returned: code: 1  signal: null

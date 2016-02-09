@@ -16,7 +16,7 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var app = express();
 
 // connect to the database
-mongoose.connect(' mongodb://simonasorlescu:simona1@ds059375.mongolab.com:59375/craigslist');
+mongoose.connect('mongodb://simonasorlescu:simona1@ds059375.mongolab.com:59375/craigslist');
 
 // create a user model
 var User = mongoose.model('User', {
