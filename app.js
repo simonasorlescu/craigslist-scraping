@@ -11,6 +11,7 @@ var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var config = require('./config');
+var user = require('./models/user');
 
 // var routes = require('./routes/index');
 // var users = require('./routes/users');
@@ -21,9 +22,9 @@ var app = express();
 mongoose.connect(config.mongoUrl);
 
 // create a user model
-var User = mongoose.model('User', {
-  oauthID: Number
-});
+// var User = mongoose.model('User', {
+//   oauthID: Number
+// });
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -148,27 +149,51 @@ passport.use(new GoogleStrategy({
   clientSecret: config.google.clientSecret,
   callbackURL: config.google.callbackURL
 },
+// function (accessToken, refreshToken, profile, done) {
+//   User.findOne({ oauthID: profile.id }, function(err, user) {
+//     if(err) { console.log(err); }
+//     if (!err && user != null) {
+//      done(null, user);
+//     } else {
+//      var user = new User({
+//        oauthID: profile.id,
+//        created: Date.now()
+//      });
+//      user.save(function(err) {
+//        if(err) {
+//          console.log(err);
+//        } else {
+//          console.log("saving user ...");
+//          done(null, user);
+//        };
+//      });
+//     };
+//   });
+// }
 function (accessToken, refreshToken, profile, done) {
-  User.findOne({ oauthID: profile.id }, function(err, user) {
-    if(err) { console.log(err); }
-    if (!err && user != null) {
-     done(null, user);
-    } else {
-     var user = new User({
-       oauthID: profile.id,
-       created: Date.now()
-     });
-     user.save(function(err) {
-       if(err) {
-         console.log(err);
-       } else {
-         console.log("saving user ...");
-         done(null, user);
-       };
-     });
-    };
-  });
-}
+    console.log(profile.emails[0].value)
+    process.nextTick(function() {
+      var query = user.findOne({'email': profile.emails[0].value});
+      query.exec(function(err, oldUser) {
+        if(oldUser) {
+          console.log("Found registered user: " + oldUser.name + " is logged in!");
+          done(null, oldUser);
+        } else {
+          var newUser = new user();
+          newUser.name = profile.displayName;
+          newUser.email = profile.emails[0].value;
+          console.log(newUser);
+          newUser.save(function(err){
+            if(err){
+              throw err;
+            }
+            console.log("New user, " + newUser.name + ", was created");
+            done(null, newUser);
+          });
+        }
+      });
+    });
+  }
 ));
 
 // test authentication
