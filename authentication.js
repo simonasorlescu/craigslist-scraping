@@ -25,48 +25,48 @@ passport.use(new GoogleStrategy({
   callbackURL: config.google.callbackURL
 },
 function (accessToken, refreshToken, profile, done) {
-  console.log(profile.emails[0].value)
-//   User.findOne({ oauthID: profile.id }, function(err, user) {
-//     if(err) { console.log(err); }
-//     if (!err && user != null) {
-//      done(null, user);
-//     } else {
-//      var user = new User({
-//        oauthID: profile.id,
-//        created: Date.now()
-//      });
-//      user.save(function(err) {
-//        if(err) {
-//          console.log(err);
-//        } else {
-//          console.log("saving user ...");
-//          done(null, user);
-//        };
-//      });
-//     };
-//   });
+  // console.log(profile.emails[0].value)
+  User.findOne({ oauthID: profile.id }, function(err, user) {
+    if(err) { console.log(err); }
+    if (!err && user != null) {
+     done(null, user);
+    } else {
+     var user = new User({
+       oauthID: profile.id,
+       created: Date.now()
+     });
+     user.save(function(err) {
+       if(err) {
+         console.log(err);
+       } else {
+         console.log("saving user ...");
+         done(null, user);
+       };
+     });
+    };
+  });
 
-    process.nextTick(function() {
-      var query = user.findOne({'email': profile.emails[0].value});
-      query.exec(function(err, oldUser) {
-        if(oldUser) {
-          console.log("Found registered user: " + oldUser.name + " is logged in!");
-          done(null, oldUser);
-        } else {
-          var newUser = new user();
-          newUser.name = profile.displayName;
-          newUser.email = profile.emails[0].value;
-          console.log(newUser);
-          newUser.save(function(err){
-            if(err){
-              throw err;
-            }
-            console.log("New user, " + newUser.name + ", was created");
-            done(null, newUser);
-          });
-        }
-      });
-    });
+    // process.nextTick(function() {
+    //   var query = user.findOne({'email': profile.emails[0].value});
+    //   query.exec(function(err, oldUser) {
+    //     if(oldUser) {
+    //       console.log("Found registered user: " + oldUser.name + " is logged in!");
+    //       done(null, oldUser);
+    //     } else {
+    //       var newUser = new user();
+    //       newUser.name = profile.displayName;
+    //       newUser.email = profile.emails[0].value;
+    //       console.log(newUser);
+    //       newUser.save(function(err){
+    //         if(err){
+    //           throw err;
+    //         }
+    //         console.log("New user, " + newUser.name + ", was created");
+    //         done(null, newUser);
+    //       });
+    //     }
+    //   });
+    // });
   }
 ));
 
