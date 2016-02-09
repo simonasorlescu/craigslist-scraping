@@ -29,7 +29,7 @@ exports.searching = function(req, res){
   "json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
 
   requests(url,function(data){
-    res.send(data);
+    return res.send(data);
   });
 };
 

@@ -15,7 +15,7 @@ $(function(){
       });
     };
   });
-  $('.save-btn').on('click', function() {
+  $('#results').on('click', '.save-btn', function() {
     console.log("whee!")
   });
 });
