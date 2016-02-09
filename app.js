@@ -52,6 +52,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/search', ensureAuthenticated, function(req, res){
+  console.log('enter2', req.user);
   res.render('search', { user: req.user });
 });
 
@@ -70,7 +71,7 @@ app.get('/searching', function(req, res){
 
 app.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/',
+  successRedirect: '/search',
   failureRedirect: '/fail'
 }));
 
