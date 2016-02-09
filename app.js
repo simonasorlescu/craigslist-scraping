@@ -7,24 +7,18 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var mongoose = require('mongoose')
-var passport = require('passport')
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var passport = require('./authentication');
+
+// var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var config = require('./config');
 var user = require('./models/user');
 var routes = require('./routes');
 
-// var users = require('./routes/users');
-
 var app = express();
 
 // connect to the database
 mongoose.connect(config.mongoUrl);
-
-// create a user model
-// var User = mongoose.model('User', {
-//   oauthID: Number
-// });
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -66,50 +60,6 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/')
 }
-
-// app.get('/auth/google',
-//   passport.authenticate('google'),
-//   function(req, res){
-// });
-// app.get('/auth/google/callback',
-// passport.authenticate('google', { failureRedirect: '/' }),
-//   function(req, res) {
-//     res.redirect('/search');
-//   }
-// );
-
-// // test authentication
-// function ensureAuthenticated(req, res, next) {
-//   if (req.isAuthenticated()) { return next(); }
-//   res.redirect('/')
-// }
-
-
-// app.get('/', function(req, res){
-//   res.render('index', { user: req.user });
-// });
-
-// app.get('/search', ensureAuthenticated, function(req, res){
-//   res.render('search', { user: req.user });
-// });
-
-// app.get('/searching', function(req, res){
-//   // input value from search
-//   var val = req.query.search;
-//   // url used to search yql
-//   var url = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20craigslist.search" +
-//   "%20where%20location%3D%22sfbay%22%20and%20type%3D%22jjj%22%20and%20query%3D%22" + val + "%22&format=" +
-//   "json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-
-//   requests(url,function(data){
-//       res.send(data);
-//   });
-// });
-
-// app.get('/logout', function(req, res){
-//   req.logout();
-//   res.redirect('/');
-// });
 
 
 function requests(url, callback) {
@@ -166,24 +116,24 @@ if (app.get('env') === 'development') {
 // });
 
 // passport settings
-passport.serializeUser(function(user, done) {
-  console.log('serializeUser: ' + user.id)
-  done(null, user.id);
-});
-passport.deserializeUser(function(id, done) {
-  user.findOne({_id : id}, function(err, user) {
-    console.log(user)
-    if(!err) done(null, user);
-    else done(err, null)
-  });
-});
+// passport.serializeUser(function(user, done) {
+//   console.log('serializeUser: ' + user.id)
+//   done(null, user.id);
+// });
+// passport.deserializeUser(function(id, done) {
+//   user.findOne({_id : id}, function(err, user) {
+//     console.log(user)
+//     if(!err) done(null, user);
+//     else done(err, null)
+//   });
+// });
 
 // config
-passport.use(new GoogleStrategy({
-  clientID: config.google.clientID,
-  clientSecret: config.google.clientSecret,
-  callbackURL: config.google.callbackURL
-},
+// passport.use(new GoogleStrategy({
+//   clientID: config.google.clientID,
+//   clientSecret: config.google.clientSecret,
+//   callbackURL: config.google.callbackURL
+// },
 // function (accessToken, refreshToken, profile, done) {
 //   User.findOne({ oauthID: profile.id }, function(err, user) {
 //     if(err) { console.log(err); }
@@ -205,31 +155,31 @@ passport.use(new GoogleStrategy({
 //     };
 //   });
 // }
-function (accessToken, refreshToken, profile, done) {
-    console.log(profile.emails[0].value)
-    process.nextTick(function() {
-      var query = user.findOne({'email': profile.emails[0].value});
-      query.exec(function(err, oldUser) {
-        if(oldUser) {
-          console.log("Found registered user: " + oldUser.name + " is logged in!");
-          done(null, oldUser);
-        } else {
-          var newUser = new user();
-          newUser.name = profile.displayName;
-          newUser.email = profile.emails[0].value;
-          console.log(newUser);
-          newUser.save(function(err){
-            if(err){
-              throw err;
-            }
-            console.log("New user, " + newUser.name + ", was created");
-            done(null, newUser);
-          });
-        }
-      });
-    });
-  }
-));
+// function (accessToken, refreshToken, profile, done) {
+//     console.log(profile.emails[0].value)
+//     process.nextTick(function() {
+//       var query = user.findOne({'email': profile.emails[0].value});
+//       query.exec(function(err, oldUser) {
+//         if(oldUser) {
+//           console.log("Found registered user: " + oldUser.name + " is logged in!");
+//           done(null, oldUser);
+//         } else {
+//           var newUser = new user();
+//           newUser.name = profile.displayName;
+//           newUser.email = profile.emails[0].value;
+//           console.log(newUser);
+//           newUser.save(function(err){
+//             if(err){
+//               throw err;
+//             }
+//             console.log("New user, " + newUser.name + ", was created");
+//             done(null, newUser);
+//           });
+//         }
+//       });
+//     });
+//   }
+// ));
 
 
 // production error handler
